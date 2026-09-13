@@ -19,12 +19,23 @@ export const signupUser = async (
   email: string,
   password: string
 ) => {
-  const res = await api.post("/user/signup", { name, email, password });
-  if (res.status !== 201) {
-    throw new Error("Unable to Signup");
+  try {
+    const res = await api.post("/user/signup", {
+      name,
+      email,
+      password,
+    });
+
+    if (res.status !== 201) {
+      throw new Error("Unable to Signup");
+    }
+
+    return res.data;
+  } catch (error: any) {
+    console.log("SIGNUP BACKEND ERROR:", error.response?.data);
+    console.log("SIGNUP STATUS:", error.response?.status);
+    throw error;
   }
-  const data = await res.data;
-  return data;
 };
 
 export const checkAuthStatus = async () => {
